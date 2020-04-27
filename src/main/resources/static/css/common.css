@@ -1,0 +1,105 @@
+.layui-form[wid100] .layui-form-label {
+    width: 100px;
+}
+.layui-fluid {
+    padding: 15px;
+    padding-bottom: 0;
+}
+
+.layui-table img {
+    max-width: 100px;
+    width: 50%;
+    height: 100%;
+}
+.layui-table-view table th{
+    text-align: center !important;
+}
+
+.hidden{
+    display: none;
+}
+
+.layui-card .layui-table-view {
+    margin: 0;
+}
+
+.table-form .layui-form-item{
+    margin-bottom: 5px;
+}
+.table-form .layui-form-item .layui-form-selected dl{
+    text-align: left;
+}
+.table-form .layui-form-item .layui-right {
+    text-align: right;
+}
+.table-form .layui-form-item .layui-right .layui-inline,.table-form .layui-form-item .layui-right .layui-input-inline{
+    margin-right: 0px;
+}
+.table-form .layui-form-item .layui-right.layui-col-md1 .layui-btn{
+    width: calc(100% - 4px);
+}
+
+.table-form .layui-button-inline{
+    width: auto !important;
+    margin-right: 0px;
+}
+
+.layui-form-label span{
+    color: red;
+    font-size: 18px;
+    margin: 0 4px;
+}
+
+.layui-layer-title{
+    background-color: #fff !important;
+    color: #333 !important;
+}
+
+@media screen and (max-width: 450px){
+    .table-form .layui-form-item .layui-inline {
+        margin-bottom: 0px;
+    }
+    .table-form .layui-form-item .layui-input-inline {
+        display: inline-block;
+        float: none;
+        left: -3px;
+        width: auto;
+        margin-left: 0px;
+    }
+}
+
+.layui-btn .layui-icon{
+    margin-right: 0px;
+}
+.layui-icon.auth-icon,.layui-icon.auth-leaf{
+    width: 18px;
+}
+
+
+.layui-layer-btn .layui-layer-btn0 {
+    border-color: #009688;
+    background-color: #009688;
+    color: #fff;
+}
+
+#image-upload-one{
+    height: 100px;
+    width: 240px;
+}
+#image-upload-one img{
+    height: 100%;
+    width: 100%;
+}
+#image-upload-one.layui-upload-drag{
+    padding: 10px;
+}
+#image-upload-one.layui-upload-drag>i{
+    padding-top: 10px;
+    display: inline-block;
+}
+#image-upload-one.layui-upload-drag>p{
+    font-size: 12px;
+}
+#image-upload-one.layui-input-block{
+    padding-right: 15px;
+}

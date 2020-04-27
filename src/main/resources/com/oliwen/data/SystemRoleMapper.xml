@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oliwen.data.SystemRoleMapper" >
+  <resultMap id="BaseResultMap" type="com.oliwen.pojo.SystemRole">
+    <constructor>
+      <idArg column="role_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="pid" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="role_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="menu_ids" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="role_status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="admin_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="admin_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+
+  <select id="querySystemRoleListPage" parameterType="page" resultMap="BaseResultMap">
+    SELECT * FROM system_role WHERE 1 = 1
+    <if test="pd.roleStatus != null and pd.roleStatus != ''">
+      AND role_status = #{pd.roleStatus}
+    </if>
+    <if test="pd.roleName != null and pd.roleName != ''">
+      AND role_name LIKE CONCAT(CONCAT('%', #{pd.roleName}),'%')
+    </if>
+    ORDER BY role_id ASC
+  </select>
+
+  <select id="queryUserRoles" resultMap="BaseResultMap">
+    SELECT * FROM system_role r , system_auth a
+    WHERE a.user_id = #{userId} AND r.role_status = 0 and FIND_IN_SET(r.role_id ,a.role_ids)
+  </select>
+
+  <update id="cumulationRolesMenuId">
+    UPDATE system_role SET menu_ids = CONCAT(CONCAT(menu_ids,','),#{menuId}) WHERE role_id = 1
+  </update>
+</mapper>

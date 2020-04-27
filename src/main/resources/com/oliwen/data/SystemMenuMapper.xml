@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oliwen.data.SystemMenuMapper" >
+  <resultMap id="BaseResultMap" type="com.oliwen.pojo.SystemMenu" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="pid" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="url" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="type" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="tag" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="icon" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sort" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="status" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="admin_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="admin_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="create_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+
+  <select id="querySystemMenuListPage" parameterType="page" resultMap="BaseResultMap">
+    SELECT * FROM system_menu WHERE status = 0
+    <if test="pd.type != null and pd.type != ''">
+      AND type = #{pd.type}
+    </if>
+    <if test="pd.pid != null and pd.pid != ''">
+      AND pid = #{pd.pid}
+    </if>
+
+    <if test="pd.pName != null and pd.pName != ''">
+      AND pid IN (SELECT id FROM system_menu WHERE name LIKE CONCAT(CONCAT('%', #{pd.pName}),'%'))
+    </if>
+    <if test="pd.name != null and pd.name != ''">
+      AND name LIKE CONCAT(CONCAT('%', #{pd.name}),'%')
+    </if>
+    <if test="pd.orderBy != null and pd.orderBy != ''">
+      order by ${pd.orderBy}
+    </if>
+    <if test="pd.orderBy == null or pd.orderBy == ''">
+      ORDER BY pid ASC,sort ASC
+    </if>
+
+  </select>
+
+  <select id="querySystemMenuByIds" parameterType="pd" resultMap="BaseResultMap">
+    SELECT * FROM system_menu WHERE status = 0
+    <if test="type != null">
+      AND type = #{type}
+    </if>
+    <if test="ids != null and ids.size() > 0">
+      AND id in
+      <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+        #{id}
+      </foreach>
+    </if>
+    ORDER BY pid ASC,sort ASC
+  </select>
+</mapper>

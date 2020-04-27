@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oliwen.data.SystemOperationMapper" >
+    <resultMap id="BaseResultMap" type="com.oliwen.pojo.SystemOperation">
+        <constructor>
+            <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+            <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <arg column="url" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <arg column="ip" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <arg column="user_agent" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <arg column="admin_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+            <arg column="admin_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+            <arg column="create_idate" javaType="java.lang.Integer" jdbcType="INTEGER" />
+        </constructor>
+    </resultMap>
+
+    <select id="querySystemOperationListPage" parameterType="page" resultMap="BaseResultMap">
+        SELECT * FROM system_operation WHERE 1=1
+        <if test="pd.adminId != null and pd.adminId != ''">
+            AND admin_id = #{pd.adminId}
+        </if>
+
+        <if test="pd.name != null and pd.name != ''">
+            AND `name` = #{pd.name}
+        </if>
+        <if test="pd.ip != null and pd.ip != ''">
+            AND ip = #{pd.ip}
+        </if>
+        <if test="pd.timeStart != null and pd.timeStart != ''">
+            AND <![CDATA[ create_time >= #{pd.timeStart} ]]>
+        </if>
+        <if test="pd.timeEnd != null and pd.timeEnd != ''">
+            AND <![CDATA[ create_time <= #{pd.timeEnd} ]]>
+        </if>
+        ORDER BY id DESC
+    </select>
+
+</mapper>

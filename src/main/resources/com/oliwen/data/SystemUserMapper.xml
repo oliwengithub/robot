@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.oliwen.data.SystemUserMapper" >
+  <resultMap id="BaseResultMap" type="com.oliwen.pojo.SystemUser">
+    <constructor>
+      <idArg column="user_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="user_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="password" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="nick_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="avatar" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="sex" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="mobile" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="email" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="remark" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="admin_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="admin_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+
+  <select id="querySystemUserListPage" parameterType="page" resultMap="BaseResultMap">
+    SELECT * FROM system_user WHERE 1=1
+
+    <if test="pd.status != null and pd.status != ''">
+      AND status = #{pd.status}
+    </if>
+    <if test="pd.status == null or pd.status == ''">
+      AND status IN (0,1)
+    </if>
+    <if test="pd.userName != null and pd.userName != ''">
+      AND user_name LIKE CONCAT(CONCAT('%', #{pd.userName}),'%')
+    </if>
+    <if test="pd.mobile != null and pd.mobile != ''">
+      AND mobile = #{pd.mobile}
+    </if>
+    <if test="pd.email != null and pd.email != ''">
+      AND email = #{pd.email}
+    </if>
+    <if test="pd.roleIds != null and pd.roleIds != '' and pd.roleIds.length > 0">
+      AND user_id IN (SELECT user_id FROM system_auth WHERE role_ids = '0'
+      <foreach collection="pd.roleIds" item="roleId" >
+        OR role_ids = #{roleId}
+      </foreach >
+      )
+    </if>
+    GROUP BY user_id ORDER BY user_id ASC
+  </select>
+</mapper>

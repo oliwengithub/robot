@@ -1,0 +1,17 @@
+# Compiled class file
+*.class
+#ideal
+.idea/
+*.iml
+
+#log
+logs/
+log/
+*.log
+
+*cache/
+
+.DS_Store
+target/
+
+*GeneratorConfig.xml

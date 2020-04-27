@@ -1,0 +1,54 @@
+server:
+  port: 30000
+  tomcat.uri-encoding: UTF-8
+  isDebug: false
+
+file:
+  url:
+    upload: http://file.uniclo.com.cn/file/upload?tag=admin-demo
+    preview: http://file.uniclo.com.cn/
+
+logging:
+  config: file:./logback.xml
+
+spring:
+  mvc:
+    view:
+      prefix: /pages/
+      suffix: .jsp
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy/MM/dd HH:mm:ss
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 200MB
+
+datasource:
+  jdbcUrl: jdbc:mysql://localhost:3306/robot?zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=utf-8&useSSL=false
+  username: root
+  password: 123456
+  driverClassName: com.mysql.jdbc.Driver
+  connectionTestQuery: SELECT 1
+  maximumPoolSize: 80
+  minimumIdle: 80
+  isAutoCommit: false
+  maxLifetime: 2000000
+  connectionTimeout: 30000
+  idleTimeout: 600000
+
+mybatis:
+  mapper-locations:
+  - classpath:/com/oliwen/data/*.xml
+  - classpath:/com/oliwen/sqlmap/*.xml
+  dialect: mysql
+  pageSqlId: .*listPage.*
+  #是否打印sql日志
+  logSQL: false
+  configuration:
+    #全局映射器启用缓存
+    cache-enabled: true
+    default-executor-type: REUSE
+    #如果参数为空，map里面的值依然显示
+    call-setters-on-nulls: true
+    use-generated-keys: true

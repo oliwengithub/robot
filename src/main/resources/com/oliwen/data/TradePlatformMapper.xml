@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oliwen.data.TradePlatformMapper">
+  <resultMap id="BaseResultMap" type="com.oliwen.pojo.TradePlatform">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="trade_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="trade_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="total_num_url" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="create_date" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+
+  <select id="queryTradePlatformListPage" parameterType="page" resultMap="BaseResultMap">
+    select * from trade_platform WHERE 1=1
+    <if test="pd.tradeName != null and pd.tradeName != ''">
+      AND trade_name LIKE CONCAT(CONCAT('%', #{pd.tradeName}),'%')
+    </if>
+    ORDER BY id DESC
+  </select>
+
+  <select id="getAllTradePlatform" resultMap="BaseResultMap">
+    SELECT * FROM trade_platform ORDER BY id DESC
+  </select>
+</mapper>

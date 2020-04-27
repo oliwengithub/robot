@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oliwen.data.TradeThreadMapper">
+  <resultMap id="BaseResultMap" type="com.oliwen.pojo.TradeThread">
+    <constructor>
+      <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="client_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="trade_max" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="trade_min" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="wave_ratio" javaType="java.lang.Double" jdbcType="DOUBLE" />
+      <arg column="price_digit" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="num_digit" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="task_cycle" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="trade_platform_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="trade_config_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="start_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="stop_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+      <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
+    </constructor>
+  </resultMap>
+
+  <select id="queryTradeThreadListPage" parameterType="page" resultType="pd">
+    SELECT tt.id, tt.client_id, tt.trade_max, tt.trade_min, tt.wave_ratio, tt.price_digit, tt.num_digit, tt.task_cycle, tt.status, tt.trade_platform_id, tt.trade_config_id, tt.start_time, tt.stop_time, tt.create_time, tc.symbol, tc.sdk_price_url, tc.sdk_to_usdt_url, tp.trade_name, tp.trade_url, tp.total_num_url
+    FROM trade_thread tt
+    LEFT JOIN trade_config tc ON tc.id = tt.trade_config_id
+    LEFT JOIN trade_platform tp ON tp.id = tt.trade_platform_id
+    WHERE 1=1
+    <if test="pd.status != null and pd.status != ''">
+      AND tt.status = #{pd.status}
+    </if>
+    <if test="pd.status == null or pd.status == ''">
+      AND status IN (0,1)
+    </if>
+    <if test="pd.tradeName != null and pd.tradeName != ''">
+      AND tp.trade_name LIKE CONCAT(CONCAT('%', #{pd.tradeName}),'%')
+    </if>
+    <if test="pd.symbol != null and pd.symbol != ''">
+      AND tc.symbol LIKE CONCAT(CONCAT('%', #{pd.symbol}),'%')
+    </if>
+    ORDER BY tt.id DESC
+  </select>
+
+  <select id="getTradeThreadConfigById" resultType="pd">
+    SELECT tt.id, tt.client_id, tt.trade_max, tt.trade_min, tt.wave_ratio, tt.price_digit, tt.num_digit, tt.task_cycle, tt.status, tt.trade_platform_id, tt.trade_config_id, tt.start_time, tt.stop_time, tt.create_time, tc.symbol, tc.sdk_price_url, tc.sdk_to_usdt_url, tp.trade_name, tp.trade_url, tp.total_num_url
+    FROM trade_thread tt
+    LEFT JOIN trade_config tc ON tc.id = tt.trade_config_id
+    LEFT JOIN trade_platform tp ON tp.id = tt.trade_platform_id
+    WHERE tt.id = #{id} AND tt.status IN (0,1)
+  </select>
+</mapper>
