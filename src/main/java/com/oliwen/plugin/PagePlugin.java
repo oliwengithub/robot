@@ -21,7 +21,7 @@ import java.sql.ResultSet;
 import java.util.Properties;
 
 /**
- * @author 李海涛
+ * @author olw
  * @ClassName: PagePlugin
  * @Description:
  * @date 2018年3月21日 下午5:58:40

@@ -33,11 +33,11 @@ public class ThreadPoolConfig {
         return thread;
     }
 
-    //周期任务调度线程池
+   /* //周期任务调度线程池
     @Bean(name = "scheduledExecutorService")
     public ScheduledExecutorService scheduledExecutorService() {
         //设置固定线程数
         return new ScheduledThreadPoolExecutor(50,
                 new BasicThreadFactory.Builder().namingPattern("syncdata-schedule-pool-%d").daemon(true).build());
-    }
+    }*/
 }
