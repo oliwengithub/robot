@@ -10,6 +10,9 @@ import com.oliwen.pojo.TradePlatform;
 import com.oliwen.pojo.TradeThread;
 import com.oliwen.service.quartz.QuartzService;
 import com.oliwen.util.thread.ThreadConstants;
+import org.quartz.Scheduler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -34,6 +37,10 @@ public class QuartzController extends BaseController {
 
     @Resource
     private QuartzService quartzService;
+
+    @Autowired
+    @Qualifier("Scheduler")
+    private Scheduler scheduler;
 
     @RequestMapping("/list")
     public ModelAndView list(){
