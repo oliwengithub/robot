@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.oliwen.mapper.SystemQuartzMapper">
-  <resultMap id="BaseResultMap" type="com.oliwen.pojo.SystemQuartz">
+<mapper namespace="com.oliwen.mapper.QuartzGroupMapper">
+  <resultMap id="BaseResultMap" type="com.oliwen.pojo.QuartzGroup">
     <constructor>
       <idArg column="id" javaType="java.lang.Integer" jdbcType="INTEGER" />
-      <arg column="name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="group_id" javaType="java.lang.Integer" jdbcType="INTEGER" />
+      <arg column="group_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="group_code" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="description" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="class_name" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="cron_expression" javaType="java.lang.String" jdbcType="VARCHAR" />
-      <arg column="method_name" javaType="java.lang.String" jdbcType="VARCHAR" />
+      <arg column="params" javaType="java.lang.String" jdbcType="VARCHAR" />
       <arg column="status" javaType="java.lang.Integer" jdbcType="INTEGER" />
       <arg column="create_time" javaType="java.util.Date" jdbcType="TIMESTAMP" />
     </constructor>
@@ -73,16 +71,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, `name`, group_id, description, class_name, cron_expression, method_name, `status`, 
-    create_time
+    id, group_name, group_code, description, params, `status`, create_time
   </sql>
-  <select id="selectByExample" parameterType="com.oliwen.pojo.SystemQuartzExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.oliwen.pojo.QuartzGroupExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from system_quartz
+    from quartz_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -93,52 +90,44 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from system_quartz
+    from quartz_group
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from system_quartz
+    delete from quartz_group
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.oliwen.pojo.SystemQuartzExample">
-    delete from system_quartz
+  <delete id="deleteByExample" parameterType="com.oliwen.pojo.QuartzGroupExample">
+    delete from quartz_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.oliwen.pojo.SystemQuartz">
-    insert into system_quartz (id, `name`, group_id, 
-      description, class_name, cron_expression, 
-      method_name, `status`, create_time
-      )
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{groupId,jdbcType=INTEGER}, 
-      #{description,jdbcType=VARCHAR}, #{className,jdbcType=VARCHAR}, #{cronExpression,jdbcType=VARCHAR}, 
-      #{methodName,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}
-      )
+  <insert id="insert" parameterType="com.oliwen.pojo.QuartzGroup">
+    insert into quartz_group (id, group_name, group_code, 
+      description, params, `status`, 
+      create_time)
+    values (#{id,jdbcType=INTEGER}, #{groupName,jdbcType=VARCHAR}, #{groupCode,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{params,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.oliwen.pojo.SystemQuartz">
-    insert into system_quartz
+  <insert id="insertSelective" parameterType="com.oliwen.pojo.QuartzGroup">
+    insert into quartz_group
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
         id,
       </if>
-      <if test="name != null">
-        `name`,
+      <if test="groupName != null">
+        group_name,
       </if>
-      <if test="groupId != null">
-        group_id,
+      <if test="groupCode != null">
+        group_code,
       </if>
       <if test="description != null">
         description,
       </if>
-      <if test="className != null">
-        class_name,
-      </if>
-      <if test="cronExpression != null">
-        cron_expression,
-      </if>
-      <if test="methodName != null">
-        method_name,
+      <if test="params != null">
+        params,
       </if>
       <if test="status != null">
         `status`,
@@ -151,23 +140,17 @@
       <if test="id != null">
         #{id,jdbcType=INTEGER},
       </if>
-      <if test="name != null">
-        #{name,jdbcType=VARCHAR},
+      <if test="groupName != null">
+        #{groupName,jdbcType=VARCHAR},
       </if>
-      <if test="groupId != null">
-        #{groupId,jdbcType=INTEGER},
+      <if test="groupCode != null">
+        #{groupCode,jdbcType=VARCHAR},
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
       </if>
-      <if test="className != null">
-        #{className,jdbcType=VARCHAR},
-      </if>
-      <if test="cronExpression != null">
-        #{cronExpression,jdbcType=VARCHAR},
-      </if>
-      <if test="methodName != null">
-        #{methodName,jdbcType=VARCHAR},
+      <if test="params != null">
+        #{params,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -177,35 +160,29 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.oliwen.pojo.SystemQuartzExample" resultType="java.lang.Long">
-    select count(*) from system_quartz
+  <select id="countByExample" parameterType="com.oliwen.pojo.QuartzGroupExample" resultType="java.lang.Long">
+    select count(*) from quartz_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update system_quartz
+    update quartz_group
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
       </if>
-      <if test="record.name != null">
-        `name` = #{record.name,jdbcType=VARCHAR},
+      <if test="record.groupName != null">
+        group_name = #{record.groupName,jdbcType=VARCHAR},
       </if>
-      <if test="record.groupId != null">
-        group_id = #{record.groupId,jdbcType=INTEGER},
+      <if test="record.groupCode != null">
+        group_code = #{record.groupCode,jdbcType=VARCHAR},
       </if>
       <if test="record.description != null">
         description = #{record.description,jdbcType=VARCHAR},
       </if>
-      <if test="record.className != null">
-        class_name = #{record.className,jdbcType=VARCHAR},
-      </if>
-      <if test="record.cronExpression != null">
-        cron_expression = #{record.cronExpression,jdbcType=VARCHAR},
-      </if>
-      <if test="record.methodName != null">
-        method_name = #{record.methodName,jdbcType=VARCHAR},
+      <if test="record.params != null">
+        params = #{record.params,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null">
         `status` = #{record.status,jdbcType=INTEGER},
@@ -219,40 +196,32 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update system_quartz
+    update quartz_group
     set id = #{record.id,jdbcType=INTEGER},
-      `name` = #{record.name,jdbcType=VARCHAR},
-      group_id = #{record.groupId,jdbcType=INTEGER},
+      group_name = #{record.groupName,jdbcType=VARCHAR},
+      group_code = #{record.groupCode,jdbcType=VARCHAR},
       description = #{record.description,jdbcType=VARCHAR},
-      class_name = #{record.className,jdbcType=VARCHAR},
-      cron_expression = #{record.cronExpression,jdbcType=VARCHAR},
-      method_name = #{record.methodName,jdbcType=VARCHAR},
+      params = #{record.params,jdbcType=VARCHAR},
       `status` = #{record.status,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.oliwen.pojo.SystemQuartz">
-    update system_quartz
+  <update id="updateByPrimaryKeySelective" parameterType="com.oliwen.pojo.QuartzGroup">
+    update quartz_group
     <set>
-      <if test="name != null">
-        `name` = #{name,jdbcType=VARCHAR},
+      <if test="groupName != null">
+        group_name = #{groupName,jdbcType=VARCHAR},
       </if>
-      <if test="groupId != null">
-        group_id = #{groupId,jdbcType=INTEGER},
+      <if test="groupCode != null">
+        group_code = #{groupCode,jdbcType=VARCHAR},
       </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
       </if>
-      <if test="className != null">
-        class_name = #{className,jdbcType=VARCHAR},
-      </if>
-      <if test="cronExpression != null">
-        cron_expression = #{cronExpression,jdbcType=VARCHAR},
-      </if>
-      <if test="methodName != null">
-        method_name = #{methodName,jdbcType=VARCHAR},
+      <if test="params != null">
+        params = #{params,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         `status` = #{status,jdbcType=INTEGER},
@@ -263,25 +232,23 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.oliwen.pojo.SystemQuartz">
-    update system_quartz
-    set `name` = #{name,jdbcType=VARCHAR},
-      group_id = #{groupId,jdbcType=INTEGER},
+  <update id="updateByPrimaryKey" parameterType="com.oliwen.pojo.QuartzGroup">
+    update quartz_group
+    set group_name = #{groupName,jdbcType=VARCHAR},
+      group_code = #{groupCode,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
-      class_name = #{className,jdbcType=VARCHAR},
-      cron_expression = #{cronExpression,jdbcType=VARCHAR},
-      method_name = #{methodName,jdbcType=VARCHAR},
+      params = #{params,jdbcType=VARCHAR},
       `status` = #{status,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByExampleWithRowbounds" parameterType="com.oliwen.pojo.SystemQuartzExample" resultMap="BaseResultMap">
+  <select id="selectByExampleWithRowbounds" parameterType="com.oliwen.pojo.QuartzGroupExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from system_quartz
+    from quartz_group
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>

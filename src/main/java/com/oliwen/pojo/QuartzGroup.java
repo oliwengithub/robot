@@ -3,7 +3,7 @@ package com.oliwen.pojo;
 import java.io.Serializable;
 import java.util.Date;
 
-public class SystemQuartzGroup implements Serializable {
+public class QuartzGroup implements Serializable {
     private Integer id;
 
     private String groupName;
@@ -20,7 +20,7 @@ public class SystemQuartzGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public SystemQuartzGroup(Integer id, String groupName, String groupCode, String description, String params, Integer status, Date createTime) {
+    public QuartzGroup(Integer id, String groupName, String groupCode, String description, String params, Integer status, Date createTime) {
         this.id = id;
         this.groupName = groupName;
         this.groupCode = groupCode;
@@ -30,7 +30,7 @@ public class SystemQuartzGroup implements Serializable {
         this.createTime = createTime;
     }
 
-    public SystemQuartzGroup() {
+    public QuartzGroup() {
         super();
     }
 
@@ -101,7 +101,7 @@ public class SystemQuartzGroup implements Serializable {
         if (getClass() != that.getClass()) {
             return false;
         }
-        SystemQuartzGroup other = (SystemQuartzGroup) that;
+        QuartzGroup other = (QuartzGroup) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getGroupName() == null ? other.getGroupName() == null : this.getGroupName().equals(other.getGroupName()))
             && (this.getGroupCode() == null ? other.getGroupCode() == null : this.getGroupCode().equals(other.getGroupCode()))

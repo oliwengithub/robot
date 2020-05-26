@@ -11,11 +11,43 @@
  Target Server Version : 50730
  File Encoding         : 65001
 
- Date: 22/05/2020 18:10:46
+ Date: 26/05/2020 18:04:33
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for quartz
+-- ----------------------------
+DROP TABLE IF EXISTS `quartz`;
+CREATE TABLE `quartz`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '任务名称',
+  `group_id` int(11) NULL DEFAULT NULL COMMENT '任务所属的分组',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '任务描述',
+  `class_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '任务的全限定类名',
+  `cron_expression` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '任务调度周期（cron表达式）',
+  `method_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '对应要执行的方法名',
+  `status` int(1) NOT NULL DEFAULT 0 COMMENT '状态 0、默认(可用)，1、禁用，2、删除',
+  `create_time` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = 'quartz定时任务调度表' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for quartz_group
+-- ----------------------------
+DROP TABLE IF EXISTS `quartz_group`;
+CREATE TABLE `quartz_group`  (
+  `id` int(11) NOT NULL,
+  `group_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分组名称',
+  `group_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分组code',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '描述',
+  `params` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '自定义参数',
+  `status` int(1) NOT NULL DEFAULT 0 COMMENT '状态 0、默认(可用)，1、禁用，2、删除',
+  `create_time` datetime(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for system_auth
@@ -114,26 +146,26 @@ INSERT INTO `system_menu` VALUES (21, 18, '修改系统配置', '/system/config/
 INSERT INTO `system_menu` VALUES (22, 19, '修改邮箱配置', '/system/config/email/update', 1, 'edit', 'layui-icon-edit', 1, 0, 1, 'admin', '2019-01-25 18:11:18');
 INSERT INTO `system_menu` VALUES (23, 20, '操作日志列表', '/system/operation/list/query', 2, '', 'layui-icon-align-left', 1, 0, 1, 'admin', '2019-02-13 17:49:59');
 INSERT INTO `system_menu` VALUES (24, 0, '任务调度', '', 0, '', 'layui-icon-notice', 10, 0, 1, 'admin', '2020-01-04 16:48:51');
-INSERT INTO `system_menu` VALUES (25, 31, '线程列表', '/system/thread/list/query', 2, '', 'layui-icon-align-left', 0, 0, 1, 'admin', '2020-01-04 16:49:56');
-INSERT INTO `system_menu` VALUES (26, 31, '添加线程', '/system/thread/insert,/system/thread/add', 1, 'add', 'layui-icon-add-1', 1, 0, 1, 'admin', '2020-01-04 16:51:33');
-INSERT INTO `system_menu` VALUES (27, 31, '修改线程', '/system/thread/update,/system/thread/edit', 1, 'edit', '', 2, 0, 1, 'admin', '2020-01-04 16:52:31');
-INSERT INTO `system_menu` VALUES (28, 31, '删除线程', '/system/thread/delete', 1, 'delete', 'layui-icon-delete', 3, 0, 1, 'admin', '2020-01-04 16:53:43');
-INSERT INTO `system_menu` VALUES (29, 31, '开启线程', '/system/thread/start', 1, 'start', 'layui-icon-play', 4, 0, 1, 'admin', '2020-01-07 18:33:59');
-INSERT INTO `system_menu` VALUES (30, 31, '关闭线程', '/system/thread/stop', 1, 'stop', 'layui-icon-pause', 5, 0, 1, 'admin', '2020-01-07 18:34:44');
-INSERT INTO `system_menu` VALUES (31, 24, '交易线程', '/system/thread/list', 0, '', 'layui-icon-align-left', 0, 0, 1, 'admin', '2020-01-07 18:39:42');
+INSERT INTO `system_menu` VALUES (25, 31, '线程列表', '/system/quartz/list/query', 2, '', 'layui-icon-align-left', 0, 0, 1, 'admin', '2020-01-04 16:49:56');
+INSERT INTO `system_menu` VALUES (26, 31, '添加线程', '/system/quartz/insert,/system/quartz/add', 1, 'add', 'layui-icon-add-1', 1, 0, 1, 'admin', '2020-01-04 16:51:33');
+INSERT INTO `system_menu` VALUES (27, 31, '修改线程', '/system/quartz/update,/system/quartz/edit', 1, 'edit', '', 2, 0, 1, 'admin', '2020-01-04 16:52:31');
+INSERT INTO `system_menu` VALUES (28, 31, '删除线程', '/system/quartz/delete', 1, 'delete', 'layui-icon-delete', 3, 0, 1, 'admin', '2020-01-04 16:53:43');
+INSERT INTO `system_menu` VALUES (29, 31, '开启线程', '/system/quartz/start', 1, 'start', 'layui-icon-play', 4, 0, 1, 'admin', '2020-01-07 18:33:59');
+INSERT INTO `system_menu` VALUES (30, 31, '关闭线程', '/system/quartz/stop', 1, 'stop', 'layui-icon-pause', 5, 0, 1, 'admin', '2020-01-07 18:34:44');
+INSERT INTO `system_menu` VALUES (31, 24, '任务配置', '/system/quartz/list', 0, '', 'layui-icon-align-left', 1, 0, 1, 'admin', '2020-01-07 18:39:42');
 INSERT INTO `system_menu` VALUES (32, 24, '交易所管理', '/system/thread/platform/list', 0, '', 'layui-icon-align-left', 1, 0, 1, 'admin', '2020-01-07 19:31:39');
-INSERT INTO `system_menu` VALUES (33, 24, '线程配置', '/system/thread/config/list', 0, '', 'layui-icon-align-left', 2, 0, 1, 'admin', '2020-01-07 19:33:25');
-INSERT INTO `system_menu` VALUES (34, 32, '添加交易所', '/system/thread/platform/insert,/system/thread/platform/add', 1, 'add', 'layui-icon-add-1', 0, 0, 1, 'admin', '2020-01-07 19:36:55');
-INSERT INTO `system_menu` VALUES (35, 32, '修改交易所', '/system/thread/platform/update,/system/thread/platform/edit', 1, 'edit', 'layui-icon-edit', 1, 0, 1, 'admin', '2020-01-07 19:38:04');
-INSERT INTO `system_menu` VALUES (36, 32, '删除交易所', '/system/thread/platform/delete', 1, 'delete', 'layui-icon-delete', 2, 0, 1, 'admin', '2020-01-07 19:39:02');
-INSERT INTO `system_menu` VALUES (37, 32, '交易所列表', '/system/thread/platform/list/query', 2, '', '', 3, 0, 1, 'admin', '2020-01-07 19:39:45');
-INSERT INTO `system_menu` VALUES (38, 33, '添加线程配置', '/system/thread/config/insert,/system/thread/config/add', 1, 'add', 'layui-icon-add-1', 0, 0, 1, 'admin', '2020-01-07 19:40:56');
-INSERT INTO `system_menu` VALUES (39, 33, '修改线程配置', '/system/thread/config/update,/system/thread/config/edit', 1, 'edit', 'layui-icon-edit', 1, 0, 1, 'admin', '2020-01-07 19:42:07');
+INSERT INTO `system_menu` VALUES (33, 24, '分组配置', '/system/quartz/group/list', 0, '', 'layui-icon-align-left', 0, 0, 1, 'admin', '2020-01-07 19:33:25');
+INSERT INTO `system_menu` VALUES (34, 32, '添加交易所', '/system/thread/platform/insert,/system/thread/platform/add', 1, 'add', 'layui-icon-add-1', 0, 1, 1, 'admin', '2020-01-07 19:36:55');
+INSERT INTO `system_menu` VALUES (35, 32, '修改交易所', '/system/thread/platform/update,/system/thread/platform/edit', 1, 'edit', 'layui-icon-edit', 1, 1, 1, 'admin', '2020-01-07 19:38:04');
+INSERT INTO `system_menu` VALUES (36, 32, '删除交易所', '/system/thread/platform/delete', 1, 'delete', 'layui-icon-delete', 2, 1, 1, 'admin', '2020-01-07 19:39:02');
+INSERT INTO `system_menu` VALUES (37, 32, '交易所列表', '/system/thread/platform/list/query', 2, '', '', 3, 1, 1, 'admin', '2020-01-07 19:39:45');
+INSERT INTO `system_menu` VALUES (38, 33, '添加线程配置', '/system/quartz/group/insert,/system/quartz/group/add', 1, 'add', 'layui-icon-add-1', 0, 0, 1, 'admin', '2020-01-07 19:40:56');
+INSERT INTO `system_menu` VALUES (39, 33, '修改线程配置', '/system/quartz/group/update,/system/quartz/group/edit', 1, 'edit', 'layui-icon-edit', 1, 0, 1, 'admin', '2020-01-07 19:42:07');
 INSERT INTO `system_menu` VALUES (40, 33, '删除线程配置', '/system/thread/config/delete', 1, 'delete', 'layui-icon-delete', 2, 0, 1, 'admin', '2020-01-07 19:43:02');
 INSERT INTO `system_menu` VALUES (41, 33, '线程配置列表', '/system/thread/config/list/query', 2, '', '', 3, 0, 1, 'admin', '2020-01-07 19:43:49');
 INSERT INTO `system_menu` VALUES (42, 31, '一键开启', '/system/thread/oneKeyStart', 1, 'oneKeyStart', 'layui-icon-play', 6, 0, 1, 'admin', '2020-01-15 10:56:42');
 INSERT INTO `system_menu` VALUES (43, 31, '一键关闭', '/system/thread/oneKeyStop', 1, 'oneKeyStop', 'layui-icon-pause', 7, 0, 1, 'admin', '2020-01-15 10:57:30');
-INSERT INTO `system_menu` VALUES (44, 31, '线程详情', '/system/thread/detail', 1, 'detail', '', 7, 0, 1, 'admin', '2020-01-15 15:36:20');
+INSERT INTO `system_menu` VALUES (44, 31, '线程详情', '/system/quartz/detail', 1, 'detail', '', 7, 0, 1, 'admin', '2020-01-15 15:36:20');
 
 -- ----------------------------
 -- Table structure for system_operation
@@ -151,7 +183,7 @@ CREATE TABLE `system_operation`  (
   `create_time` datetime(0) NULL DEFAULT NULL COMMENT '操作时间',
   `create_idate` int(10) NULL DEFAULT NULL COMMENT '操作日期',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 198 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统操作记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 219 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统操作记录' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of system_operation
@@ -353,38 +385,27 @@ INSERT INTO `system_operation` VALUES (194, '登录', '/system/login/check', '{\
 INSERT INTO `system_operation` VALUES (195, '登录', '/system/login/check', '{\"password\":\"123qweasd\",\"code\":\"bfeg\",\"userName\":\"admin\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36', 1, 'admin', '2020-04-27 17:44:58', 20200427);
 INSERT INTO `system_operation` VALUES (196, '退出', '/system/login/out', '{}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36', 1, 'admin', '2020-04-27 17:51:51', 20200427);
 INSERT INTO `system_operation` VALUES (197, '登录', '/system/login/check', '{\"password\":\"123qweasd\",\"code\":\"qsux\",\"userName\":\"admin\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.120 Safari/537.36', 1, 'admin', '2020-04-27 17:52:01', 20200427);
-
--- ----------------------------
--- Table structure for system_quartz
--- ----------------------------
-DROP TABLE IF EXISTS `system_quartz`;
-CREATE TABLE `system_quartz`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '任务名称',
-  `group_id` int(11) NULL DEFAULT NULL COMMENT '任务所属的分组',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '任务描述',
-  `class_name` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '任务的全限定类名',
-  `cron_expression` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '任务调度周期（cron表达式）',
-  `method_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '对应要执行的方法名',
-  `status` int(1) NOT NULL DEFAULT 0 COMMENT '状态 0、默认(可用)，1、禁用，2、删除',
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = 'quartz定时任务调度表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for system_quartz_group
--- ----------------------------
-DROP TABLE IF EXISTS `system_quartz_group`;
-CREATE TABLE `system_quartz_group`  (
-  `id` int(11) NOT NULL,
-  `group_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分组名称',
-  `group_code` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '分组code',
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '描述',
-  `params` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT NULL COMMENT '自定义参数',
-  `status` int(1) NOT NULL DEFAULT 0 COMMENT '状态 0、默认(可用)，1、禁用，2、删除',
-  `create_time` datetime(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = Dynamic;
+INSERT INTO `system_operation` VALUES (198, '登录', '/system/login/check', '{\"password\":\"1123QWEASD\",\"code\":\"XVJ5\",\"userName\":\"admin\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 0, NULL, '2020-05-26 17:39:09', 20200526);
+INSERT INTO `system_operation` VALUES (199, '登录', '/system/login/check', '{\"password\":\"123qweasd\",\"code\":\"6h6j\",\"userName\":\"admin\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:39:34', 20200526);
+INSERT INTO `system_operation` VALUES (200, '更新菜单', '/system/menu/update', '{\"name\":\"交易线程\",\"icon\":\"layui-icon-align-left\",\"pid\":\"24\",\"id\":\"31\",\"tag\":\"\",\"sort\":\"0\",\"type\":\"0\",\"url\":\"/system/quartz/list\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:40:48', 20200526);
+INSERT INTO `system_operation` VALUES (201, '更新菜单', '/system/menu/update', '{\"name\":\"线程列表\",\"icon\":\"layui-icon-align-left\",\"pid\":\"31\",\"id\":\"25\",\"tag\":\"\",\"sort\":\"0\",\"type\":\"2\",\"url\":\"/system/quartz/list/query\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:41:13', 20200526);
+INSERT INTO `system_operation` VALUES (202, '更新菜单', '/system/menu/update', '{\"name\":\"添加线程\",\"icon\":\"layui-icon-add-1\",\"pid\":\"31\",\"id\":\"26\",\"tag\":\"add\",\"sort\":\"1\",\"type\":\"1\",\"url\":\"/system/quartz/insert,/system/quartz/add\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:41:26', 20200526);
+INSERT INTO `system_operation` VALUES (203, '更新菜单', '/system/menu/update', '{\"name\":\"修改线程\",\"icon\":\"\",\"pid\":\"31\",\"id\":\"27\",\"tag\":\"edit\",\"sort\":\"2\",\"type\":\"1\",\"url\":\"/system/quartz/update,/system/quartz/edit\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:41:37', 20200526);
+INSERT INTO `system_operation` VALUES (204, '更新菜单', '/system/menu/update', '{\"name\":\"删除线程\",\"icon\":\"layui-icon-delete\",\"pid\":\"31\",\"id\":\"28\",\"tag\":\"delete\",\"sort\":\"3\",\"type\":\"1\",\"url\":\"/system/quartz/delete\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:41:48', 20200526);
+INSERT INTO `system_operation` VALUES (205, '更新菜单', '/system/menu/update', '{\"name\":\"开启线程\",\"icon\":\"layui-icon-play\",\"pid\":\"31\",\"id\":\"29\",\"tag\":\"start\",\"sort\":\"4\",\"type\":\"1\",\"url\":\"/system/quartz/start\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:41:57', 20200526);
+INSERT INTO `system_operation` VALUES (206, '更新菜单', '/system/menu/update', '{\"name\":\"关闭线程\",\"icon\":\"layui-icon-pause\",\"pid\":\"31\",\"id\":\"30\",\"tag\":\"stop\",\"sort\":\"5\",\"type\":\"1\",\"url\":\"/system/quartz/stop\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:42:12', 20200526);
+INSERT INTO `system_operation` VALUES (207, '更新菜单', '/system/menu/update', '{\"name\":\"线程详情\",\"icon\":\"\",\"pid\":\"31\",\"id\":\"44\",\"tag\":\"detail\",\"sort\":\"7\",\"type\":\"1\",\"url\":\"/system/quartz/detail\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:42:20', 20200526);
+INSERT INTO `system_operation` VALUES (208, '更新菜单', '/system/menu/update', '{\"name\":\"线程配置\",\"icon\":\"layui-icon-align-left\",\"pid\":\"24\",\"id\":\"33\",\"tag\":\"\",\"sort\":\"2\",\"type\":\"0\",\"url\":\"/system/quartz/group/list\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:43:36', 20200526);
+INSERT INTO `system_operation` VALUES (209, '更新菜单', '/system/menu/update', '{\"name\":\"添加线程配置\",\"icon\":\"layui-icon-add-1\",\"pid\":\"33\",\"id\":\"38\",\"tag\":\"add\",\"sort\":\"0\",\"type\":\"1\",\"url\":\"/system/quartz/group/insert,/system/quartz/group/add\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:44:17', 20200526);
+INSERT INTO `system_operation` VALUES (210, '更新菜单', '/system/menu/update', '{\"name\":\"修改线程配置\",\"icon\":\"layui-icon-edit\",\"pid\":\"33\",\"id\":\"39\",\"tag\":\"edit\",\"sort\":\"1\",\"type\":\"1\",\"url\":\"/system/quartz/group/update,/system/quartz/group/edit\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:44:49', 20200526);
+INSERT INTO `system_operation` VALUES (211, '更新菜单', '/system/menu/update', '{\"name\":\"任务配置\",\"icon\":\"layui-icon-align-left\",\"pid\":\"24\",\"id\":\"31\",\"tag\":\"\",\"sort\":\"0\",\"type\":\"0\",\"url\":\"/system/quartz/list\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:46:41', 20200526);
+INSERT INTO `system_operation` VALUES (212, '更新菜单', '/system/menu/update', '{\"name\":\"分组配置\",\"icon\":\"layui-icon-align-left\",\"pid\":\"24\",\"id\":\"33\",\"tag\":\"\",\"sort\":\"2\",\"type\":\"0\",\"url\":\"/system/quartz/group/list\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:47:34', 20200526);
+INSERT INTO `system_operation` VALUES (213, '更新菜单', '/system/menu/update', '{\"name\":\"任务配置\",\"icon\":\"layui-icon-align-left\",\"pid\":\"24\",\"id\":\"31\",\"tag\":\"\",\"sort\":\"1\",\"type\":\"0\",\"url\":\"/system/quartz/list\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:48:07', 20200526);
+INSERT INTO `system_operation` VALUES (214, '更新菜单', '/system/menu/update', '{\"name\":\"分组配置\",\"icon\":\"layui-icon-align-left\",\"pid\":\"24\",\"id\":\"33\",\"tag\":\"\",\"sort\":\"0\",\"type\":\"0\",\"url\":\"/system/quartz/group/list\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:48:21', 20200526);
+INSERT INTO `system_operation` VALUES (215, '更新菜单', '/system/menu/update', '{}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:49:49', 20200526);
+INSERT INTO `system_operation` VALUES (216, '更新菜单', '/system/menu/update', '{\"id\":\"36\",\"status\":\"1\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:49:52', 20200526);
+INSERT INTO `system_operation` VALUES (217, '更新菜单', '/system/menu/update', '{\"id\":\"35\",\"status\":\"1\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:49:55', 20200526);
+INSERT INTO `system_operation` VALUES (218, '更新菜单', '/system/menu/update', '{\"id\":\"34\",\"status\":\"1\"}', '0:0:0:0:0:0:0:1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.138 Safari/537.36', 1, 'admin', '2020-05-26 17:49:59', 20200526);
 
 -- ----------------------------
 -- Table structure for system_role

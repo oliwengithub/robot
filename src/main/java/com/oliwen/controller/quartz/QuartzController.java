@@ -1,28 +1,20 @@
 package com.oliwen.controller.quartz;
 
-import com.alibaba.fastjson.JSONObject;
 import com.oliwen.base.BaseController;
 import com.oliwen.entity.Page;
 import com.oliwen.entity.PageData;
 import com.oliwen.entity.ResultBody;
-import com.oliwen.pojo.TradeConfig;
-import com.oliwen.pojo.TradePlatform;
-import com.oliwen.pojo.TradeThread;
+import com.oliwen.pojo.Quartz;
+import com.oliwen.pojo.QuartzGroup;
+import com.oliwen.service.quartz.QuartzGroupService;
 import com.oliwen.service.quartz.QuartzService;
-import com.oliwen.util.thread.ThreadConstants;
-import org.quartz.Scheduler;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 
 
 @RestController
@@ -31,20 +23,20 @@ import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
  *
  * @author: olw
  * @date: 2020/4/30 0030 11:06
- * @description:  任务调度quartz模块
+ * @description:  任务调度配置模块
  */
 public class QuartzController extends BaseController {
 
     @Resource
     private QuartzService quartzService;
 
-    @Autowired
-    @Qualifier("Scheduler")
-    private Scheduler scheduler;
+    @Resource
+    private QuartzGroupService quartzGroupService;
+
 
     @RequestMapping("/list")
     public ModelAndView list(){
-        ModelAndView mv = getView("/system/thread/list");
+        ModelAndView mv = getView("/system/quartz/list");
         return mv;
     }
 
@@ -62,19 +54,14 @@ public class QuartzController extends BaseController {
 
     @RequestMapping("/add")
     public ModelAndView add(){
-        LOGGER.info("新增任务");
-        ModelAndView mv = getView("/system/quartz/add");
-        List<TradePlatform> tradePlatforms = tradePlatformService.getAllTradePlatform();
-        List<TradeConfig> tradeConfigs = tradeConfigService.getAllTradeConfig();
-        mv.addObject("tradePlatforms", tradePlatforms);
-        mv.addObject("tradeConfigs", tradeConfigs);
+        ModelAndView mv = getView("/system/quartz/list");
         return mv;
     }
 
     @RequestMapping("/insert")
-    public ResultBody insertThread(TradeThread tradeThread) {
+    public ResultBody insert(Quartz quartz) {
         ResultBody body = new ResultBody();
-        boolean flag = tradeThreadService.insert(tradeThread);
+        boolean flag = quartzService.insert(quartz);
         if (!flag) {
             return body.error("添加失败");
         }
@@ -83,24 +70,22 @@ public class QuartzController extends BaseController {
 
     @RequestMapping("/edit")
     public ModelAndView edit(Integer id) {
-        ModelAndView mv = getView("/system/thread/edit");
-        TradeThread tradeThread = tradeThreadService.getTradeThreadById(id);
-        List<TradeConfig> tradeConfigs = tradeConfigService.getAllTradeConfig();
-        List<TradePlatform> tradePlatforms = tradePlatformService.getAllTradePlatform();
-        mv.addObject("tradeThread", tradeThread);
-        mv.addObject("tradePlatforms", tradePlatforms);
-        mv.addObject("tradeConfigs", tradeConfigs);
+        ModelAndView mv = getView("/system/quartz/edit");
+        Quartz quartz = quartzService.getQuartzById(id);
+        List<QuartzGroup> quartzGroups = quartzGroupService.getAllQuartzGroup();
+        mv.addObject("quartz", quartz);
+        mv.addObject("quartzGroups", quartzGroups);
         return mv;
     }
 
     @RequestMapping("/update")
-    public ResultBody updateThread(TradeThread tradeThread) {
+    public ResultBody update(Quartz quartz) {
         ResultBody body = new ResultBody();
-        TradeThread old = tradeThreadService.getTradeThreadById(tradeThread.getId());
+        Quartz old = quartzService.getQuartzById(quartz.getId());
         if (old.getStatus() == 1) {
             return body.error("正在运行中，不可修改");
         }
-        boolean flag = tradeThreadService.update(tradeThread);
+        boolean flag = quartzService.update(quartz);
         if(!flag) {
             return body.error("修改失败");
         }
@@ -108,84 +93,97 @@ public class QuartzController extends BaseController {
     }
 
     @RequestMapping("/delete")
-    public ResultBody deleteThread(Integer id) {
+    public ResultBody delete(Integer id) {
         ResultBody body = new ResultBody();
-        boolean flag = tradeThreadService.delete(id);
+        boolean flag = quartzService.delete(id);
         if (!flag) {
             body.error("删除失败");
         }
         return body;
     }
 
+    @RequestMapping("/status")
+    public ResultBody updateStatus(Integer id, Integer status) {
+        ResultBody body = new ResultBody();
+        Quartz quartz = new Quartz();
+        quartz.setId(id);
+        quartz.setStatus(status);
+        boolean flag = quartzService.update(quartz);
+        if (!flag) {
+            body.error("操作失败");
+        }
+        return body;
+    }
+
     @RequestMapping("/detail")
     public ModelAndView detail(Integer id) {
-        ModelAndView mv = getView("/system/thread/detail");
-        PageData tradeThreadDetail = tradeThreadService.getTradeThreadConfigById(id);
-        mv.addObject("tradeThreadDetail", tradeThreadDetail);
+        ModelAndView mv = getView("/system/quartz/detail");
+        PageData quartzDetail = quartzService.getQuartzDetailById(id);
+        mv.addObject("quartzDetail", quartzDetail);
         return mv;
     }
 
-    @RequestMapping("/start")
-    public ResultBody startThread(ThreadData threadData) {
+    /*@RequestMapping("/start")
+    public ResultBody startquartz(quartzData quartzData) {
         ResultBody body = new ResultBody();
-        if (threadData.getStatus() == ThreadConstants.START_STATUS && threadService.getScheduledFuture(threadData.getSymbol(), threadData.getTradeName()) != null) {
+        if (quartzData.getStatus() == quartzConstants.START_STATUS && quartzService.getScheduledFuture(quartzData.getSymbol(), quartzData.getTradeName()) != null) {
             return body.error("当前交易线程已启动");
         }
-        threadService.start(threadData);
-        TradeThread tradeThread = new TradeThread();
-        tradeThread.setId(threadData.getId());
-        tradeThread.setStatus(ThreadConstants.START_STATUS);
-        tradeThread.setStartTime(new Date());
-        tradeThreadService.update(tradeThread);
+        quartzService.start(quartzData);
+        Tradequartz tradequartz = new Tradequartz();
+        tradequartz.setId(quartzData.getId());
+        tradequartz.setStatus(quartzConstants.START_STATUS);
+        tradequartz.setStartTime(new Date());
+        tradequartzService.update(tradequartz);
         return body;
     }
 
     @RequestMapping("/stop")
-    public ResultBody stopThread(ThreadData threadData) {
+    public ResultBody stopquartz(quartzData quartzData) {
         ResultBody body = new ResultBody();
-        if (threadService.getScheduledFuture(threadData.getSymbol(), threadData.getTradeName()) == null && threadData.getStatus() == ThreadConstants.STOP_STATUS) {
+        if (quartzService.getScheduledFuture(quartzData.getSymbol(), quartzData.getTradeName()) == null && quartzData.getStatus() == quartzConstants.STOP_STATUS) {
             return body.error("当前交易线程已停止");
         }
-        threadService.stop(threadData);
-        TradeThread tradeThread = new TradeThread();
-        tradeThread.setId(threadData.getId());
-        tradeThread.setStatus(ThreadConstants.STOP_STATUS);
-        tradeThread.setStopTime(new Date());
-        tradeThreadService.update(tradeThread);
+        quartzService.stop(quartzData);
+        Tradequartz tradequartz = new Tradequartz();
+        tradequartz.setId(quartzData.getId());
+        tradequartz.setStatus(quartzConstants.STOP_STATUS);
+        tradequartz.setStopTime(new Date());
+        tradequartzService.update(tradequartz);
         return body;
     }
 
     @RequestMapping("/oneKeyStart")
-    public ResultBody oneKeyStart(String threadArray) {
+    public ResultBody oneKeyStart(String quartzArray) {
         ResultBody body = new ResultBody();
-        List<ThreadData> tradeThreads = JSONObject.parseArray(threadArray, ThreadData.class);
-        threadService.oneKeyStart(tradeThreads);
+        List<quartzData> tradequartzs = JSONObject.parseArray(quartzArray, quartzData.class);
+        quartzService.oneKeyStart(tradequartzs);
         List<Integer> ids = new ArrayList<>();
-        tradeThreads.forEach(threadData ->{
-            ids.add(threadData.getId());
+        tradequartzs.forEach(quartzData ->{
+            ids.add(quartzData.getId());
         });
         //更新模板
-        TradeThread tradeThread = new TradeThread();
-        tradeThread.setStatus(ThreadConstants.START_STATUS);
-        tradeThread.setStartTime(new Date());
-        tradeThreadService.updateBatch(ids, tradeThread);
+        Tradequartz tradequartz = new Tradequartz();
+        tradequartz.setStatus(quartzConstants.START_STATUS);
+        tradequartz.setStartTime(new Date());
+        tradequartzService.updateBatch(ids, tradequartz);
         return body;
     }
 
     @RequestMapping("/oneKeyStop")
-    public ResultBody oneKeyStop(String threadArray) {
+    public ResultBody oneKeyStop(String quartzArray) {
         ResultBody body = new ResultBody();
-        List<ThreadData> tradeThreads = JSONObject.parseArray(threadArray, ThreadData.class);
-        threadService.oneKeyStop(tradeThreads);
+        List<quartzData> tradequartzs = JSONObject.parseArray(quartzArray, quartzData.class);
+        quartzService.oneKeyStop(tradequartzs);
         List<Integer> ids = new ArrayList<>();
-        tradeThreads.forEach(threadData ->{
-            ids.add(threadData.getId());
+        tradequartzs.forEach(quartzData ->{
+            ids.add(quartzData.getId());
         });
         //更新模板
-        TradeThread tradeThread = new TradeThread();
-        tradeThread.setStatus(ThreadConstants.STOP_STATUS);
-        tradeThread.setStopTime(new Date());
-        tradeThreadService.updateBatch(ids, tradeThread);
+        Tradequartz tradequartz = new Tradequartz();
+        tradequartz.setStatus(quartzConstants.STOP_STATUS);
+        tradequartz.setStopTime(new Date());
+        tradequartzService.updateBatch(ids, tradequartz);
         return body;
     }*/
 

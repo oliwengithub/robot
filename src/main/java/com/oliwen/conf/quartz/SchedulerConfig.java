@@ -37,7 +37,6 @@ public class SchedulerConfig {
         return factory;
     }
 
-
     /**
      * @author: olw
      * @Date: 2020/4/29 0029 16:23
@@ -46,7 +45,6 @@ public class SchedulerConfig {
     public QuartzInitializerListener executorListener() {
        return new QuartzInitializerListener();
     }
-
 
     /**
      * @author: olw
