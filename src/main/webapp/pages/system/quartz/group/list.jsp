@@ -5,7 +5,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>线程配置</title>
+    <title>任务分组</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -32,7 +32,7 @@
                         <div class="layui-inline">
                             <div class="layui-input-inline layui-button-inline">
                                 <c:if test="${fn:contains(currMenuChildrenTags, 'add')}">
-                                    <button class="layui-btn layui-btn-primary" lay-submit="" lay-filter="add">添加配置</button>
+                                    <button class="layui-btn layui-btn-primary" lay-submit="" lay-filter="add">添加分组</button>
                                 </c:if>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
         table.render({
             id: 'layui-table'
             , elem: '#layui-table'
-            , url: '${pageContext.request.contextPath}/system/thread/config/list/query'
+            , url: '${pageContext.request.contextPath}/system/quartz/group/list/query'
             , request: {
                 pageName: 'pageIndex' //页码的参数名称，默认：page
                 , limitName: 'pageSize' //每页数据量的参数名，默认：limit

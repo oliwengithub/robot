@@ -2,7 +2,10 @@ package com.oliwen.service.quartz;
 
 import com.oliwen.entity.Page;
 import com.oliwen.entity.PageData;
+import com.oliwen.mapper.QuartzGroupMapper;
 import com.oliwen.pojo.QuartzGroup;
+import com.oliwen.pojo.QuartzGroupExample;
+import com.oliwen.util.ExceptionUtil;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,28 +28,46 @@ public class QuartzGroupService {
     @Resource
     private SqlSessionTemplate sqlSessionTemplate;
 
+    @Resource
+    private QuartzGroupMapper quartzGroupMapper;
 
-    public List<PageData> queryQuartzPageList (Page page) {
-        return null;
+
+    public List<PageData> queryQuartzGroupPageList (Page page) {
+        return sqlSessionTemplate.selectList("com.oliwen.data.QuartzGroupMapper.queryQuartzGroupPageList", page);
     }
 
     public List<QuartzGroup> getAllQuartzGroup () {
-        return null;
+        return sqlSessionTemplate.selectList("com.oliwen.data.QuartzGroupMapper.getAllQuartzGroup");
     }
 
     public boolean insert (QuartzGroup quartzGroup) {
+
+        try {
+            return quartzGroupMapper.insertSelective(quartzGroup) > 0;
+        }catch (Exception e) {
+            ExceptionUtil.loggerError(logger, "添加任务分组", e);
+        }
         return false;
     }
 
-    public QuartzGroup getQuartGroupById (Integer id) {
-        return null;
+    /**
+     *  根据id获取任务分组
+     * @author: olw
+     * @Date: 2020/5/30 0030 17:10
+     * @param id
+     * @returns:
+    */
+    public QuartzGroup getQuartzGroupById (Integer id) {
+       return  quartzGroupMapper.selectByPrimaryKey(id);
     }
 
-    public QuartzGroup getQuartzGroupById (Integer id) {
-        return null;
-    }
 
     public boolean update (QuartzGroup quartzGroup) {
+        try {
+            return quartzGroupMapper.updateByPrimaryKeySelective(quartzGroup) > 0;
+        }catch (Exception e) {
+            ExceptionUtil.loggerError(logger, "更新任务分组", e);
+        }
         return false;
     }
 }

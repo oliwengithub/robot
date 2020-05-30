@@ -28,104 +28,48 @@
                 <div class="layui-card-body" pad15>
                     <form class="layui-form" action="">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">选择交易所</label>
+                            <label class="layui-form-label">选择分组</label>
                             <div class="layui-input-block">
-                                <select name="tradePlatformId" lay-verify="required" lay-search="">
+                                <select name="groupId" lay-verify="required" lay-search="">
                                     <option value="">直接选择或搜索选择</option>
-                                    <c:if test="${not empty tradePlatforms}">
-                                        <c:forEach items="${tradePlatforms}" var="tradePlatform">
-                                            <option value="${tradePlatform.id}">${tradePlatform.tradeName}</option>
+                                    <c:if test="${not empty quartzGroups}">
+                                        <c:forEach items="${quartzGroups}" var="quartzGroup">
+                                            <option value="${quartzGroup.id}">${quartzGroup.name}</option>
                                         </c:forEach>
                                     </c:if>
                                 </select>
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">选择交易对</label>
+                            <label class="layui-form-label">任务名称</label>
                             <div class="layui-input-block">
-                                <select name="tradeConfigId" lay-verify="required" lay-search="">
-                                    <option value="">直接选择或搜索选择</option>
-                                    <c:if test="${not empty tradeConfigs}">
-                                        <c:forEach items="${tradeConfigs}" var="tradeConfig">
-                                            <option value="${tradeConfig.id}">${tradeConfig.symbol}</option>
-                                        </c:forEach>
-                                    </c:if>
-                                </select>
+                                <input type="text" name="name" autocomplete="off" placeholder="任务名称" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">交易用户ID</label>
+                            <label class="layui-form-label">全限定类名</label>
                             <div class="layui-input-block">
-                                <input type="text" name="clientId" autocomplete="off" placeholder="交易用户ID" class="layui-input">
+                                <input type="number" name="className" placeholder="全限定类名" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">最小限额</label>
+                            <label class="layui-form-label">方法名称</label>
                             <div class="layui-input-block">
-                                <input type="number" name="tradeMin" placeholder="默认单笔挂单最小限额(CNY)" autocomplete="off" class="layui-input">
+                                <input type="number" name="methodName" placeholder="methodName" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">最大限额</label>
+                            <label class="layui-form-label">cron时间表达式</label>
                             <div class="layui-input-block">
-                                <input type="number" name="tradeMax" placeholder="默认单笔挂单最大限额(CNY)" autocomplete="off" class="layui-input">
+                                <input type="number" name="cronExpression" placeholder="cron时间表达式" autocomplete="off" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">波动范围</label>
+                            <label class="layui-form-label">任务描述</label>
                             <div class="layui-input-block">
-                                <input type="number" name="waveRatio" placeholder="单价波动范围(在原始价格上波动一般为万分之一左右)" autocomplete="off" class="layui-input">
+                                <input type="number" name="description" placeholder="任务描述" autocomplete="off" class="layui-input">
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">单价小数位</label>
-                            <div class="layui-input-block">
-                                <input type="number" name="priceDigit" placeholder="单价小数位" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">数量小数位</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="numDigit" maxlength="30" placeholder="数量小数位" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">调度周期</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="taskCycle" maxlength="30" placeholder="交易周期单位(ms)" autocomplete="off" class="layui-input">
-                            </div>
-                        </div>
-                        <%--<div class="layui-col-xs6">
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">状态</label>
-                                <div class="layui-input-block">
-                                    <input type="radio" name="status" value="0" title="正常" checked>
-                                    <input type="radio" name="status" value="1" title="禁用">
-                                </div>
-                            </div>
-                        </div>
-                         <div class="layui-col-xs6">
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">最后开始时间</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="start_date_time" maxlength="30" placeholder="请谨慎填写，添加成功后，发送账号信息到此邮箱" autocomplete="off" class="layui-input" lay-verify="email">
-                                </div>
-                            </div>
-                        </div>
-                         <div class="layui-col-xs6">
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">最后关闭时间</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="stop_data_time" maxlength="30" placeholder="请谨慎填写，添加成功后，发送账号信息到此邮箱" autocomplete="off" class="layui-input" lay-verify="email">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layui-form-item layui-form-text">
-                            <label class="layui-form-label"></label>
-                            <div class="layui-input-block">
-                                <textarea name="remark" placeholder="请用简单的话描述下此用户..." class="layui-textarea" maxlength="500"></textarea>
-                            </div>
-                        </div>--%>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
                                 <button class="layui-btn" lay-submit lay-filter="save">确认提交</button>
@@ -152,7 +96,7 @@
         form.on('submit(save)', function(obj){
             $.ajax({
                 type: 'POST',
-                url: '${pageContext.request.contextPath}/system/thread/insert',
+                url: '${pageContext.request.contextPath}/system/quartz/insert',
                 data: obj.field,
                 success: function (result) {
                     if(result.code === 1){

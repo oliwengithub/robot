@@ -8,6 +8,11 @@ import com.oliwen.pojo.Quartz;
 import com.oliwen.pojo.QuartzGroup;
 import com.oliwen.service.quartz.QuartzGroupService;
 import com.oliwen.service.quartz.QuartzService;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -31,6 +36,23 @@ public class QuartzOperateController extends BaseController {
 
     @Resource
     private QuartzGroupService quartzGroupService;
+
+    @Autowired
+    @Qualifier("Scheduler")
+    private Scheduler scheduler;
+
+
+    @RequestMapping("/start")
+    public ResultBody startThread(Integer quartzId) throws Exception {
+        ResultBody body = new ResultBody();
+
+
+        //JobKey jobKey = new JobKey(quartz.getGroupId().toString(), quartz.getClassName());
+
+        //清除
+        // scheduler.deleteJob(jobKey);
+        return body;
+    }
 
     /*@RequestMapping("/start")
     public ResultBody startThread(ThreadData threadData) {

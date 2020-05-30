@@ -2,7 +2,9 @@ package com.oliwen.service.quartz;
 
 import com.oliwen.entity.Page;
 import com.oliwen.entity.PageData;
+import com.oliwen.mapper.QuartzMapper;
 import com.oliwen.pojo.Quartz;
+import com.oliwen.util.ExceptionUtil;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,20 +27,39 @@ public class QuartzService {
     @Resource
     private SqlSessionTemplate sqlSessionTemplate;
 
+    @Resource
+    private QuartzMapper quartzMapper;
 
     public List<PageData> queryQuartzPageList (Page page) {
-        return null;
+        return sqlSessionTemplate.selectList("com.oliwen.data.QuartzMapper.queryQuartzPageList", page);
     }
 
     public boolean insert (Quartz quartz) {
+        try {
+            return quartzMapper.insertSelective(quartz) > 0;
+        }catch (Exception e) {
+            ExceptionUtil.loggerError(logger, "插入任务", e, quartz);
+        }
         return false;
     }
 
+    /**
+     * 根据id获取任务信息
+     * @author: olw
+     * @Date: 2020/5/30 0030 17:25
+     * @param id
+     * @returns: Quartz
+    */
     public Quartz getQuartzById (Integer id) {
-        return null;
+        return quartzMapper.selectByPrimaryKey(id);
     }
 
     public boolean update (Quartz quartz) {
+        try {
+            return quartzMapper.updateByPrimaryKey(quartz) > 0;
+        }catch (Exception e) {
+            ExceptionUtil.loggerError(logger, "更新任务信息", e, quartz);
+        }
         return false;
     }
 

@@ -45,67 +45,6 @@
                                 <input type="text" name="sdkToUsdtUrl" autocomplete="off" placeholder="获取交易对中商品转换USDT接口URL" class="layui-input" >
                             </div>
                         </div>
-                          <%--  <div class="layui-form-item">
-                                <label class="layui-form-label">交易用户ID</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="clientId" autocomplete="off" placeholder="交易用户ID" class="layui-input">
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">交易对名称</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="symbol" autocomplete="off" placeholder="交易对" class="layui-input" >
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">单价小数位</label>
-                                <div class="layui-input-block">
-                                    <input type="number" name="priceDigit" placeholder="单价小数位" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">数量小数位</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="numDigit" maxlength="30" placeholder="数量小数位" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">调度周期</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="taskCycle" maxlength="30" placeholder="交易周期单位(ms)" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>--%>
-                       <%-- <div class="layui-col-xs6">
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">状态</label>
-                                <div class="layui-input-block">
-                                    <input type="radio" name="status" value="0" title="正常" checked>
-                                    <input type="radio" name="status" value="1" title="禁用">
-                                </div>
-                            </div>
-                        </div>
-                         <div class="layui-col-xs6">
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">最后开始时间</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="start_date_time" maxlength="30" placeholder="请谨慎填写，添加成功后，发送账号信息到此邮箱" autocomplete="off" class="layui-input" lay-verify="email">
-                                </div>
-                            </div>
-                        </div>
-                         <div class="layui-col-xs6">
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">最后关闭时间</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="stop_data_time" maxlength="30" placeholder="请谨慎填写，添加成功后，发送账号信息到此邮箱" autocomplete="off" class="layui-input" lay-verify="email">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layui-form-item layui-form-text">
-                            <label class="layui-form-label"></label>
-                            <div class="layui-input-block">
-                                <textarea name="remark" placeholder="请用简单的话描述下此用户..." class="layui-textarea" maxlength="500"></textarea>
-                            </div>
-                        </div>--%>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
                                 <button class="layui-btn" lay-submit lay-filter="save">确认提交</button>

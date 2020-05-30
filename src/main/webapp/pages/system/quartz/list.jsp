@@ -177,7 +177,7 @@
         table.render({
             id: 'layui-table'
             , elem: '#layui-table'
-            , url: '${pageContext.request.contextPath}/system/thread/list/query'
+            , url: '${pageContext.request.contextPath}/system/quartz/list/query'
             , request: {
                 pageName: 'pageIndex' //页码的参数名称，默认：page
                 , limitName: 'pageSize' //每页数据量的参数名，默认：limit
@@ -188,18 +188,13 @@
             , cols: [[
                 {type: 'checkbox'}
                 , {field: 'id', title: '序号', width: 60, align: 'center', type: 'numbers'}
-                , {field: 'trade_name', title: '交易所名称', minWidth: 100, align: 'center'}
-                , {field: 'client_id', title: '机器人ID', width: 90, align: 'center'}
-                , {field: 'symbol', title: '交易对名称', width: 120, align: 'center'}
-                , {field: 'trade_max', title: '默认最大限额(CNY)', width: 100, align: 'center'}
-                , {field: 'trade_min', title: '默认最小限额(CNY)', width: 100, align: 'center'}
-                , {field: 'wave_ratio', title: '单价波动', width: 100, align: 'center'}
-                , {field: 'price_digit', title: '单价小数位', width: 100, align: 'center'}
-                , {field: 'num_digit', title: '数量小数位', width: 100, align: 'center' }
-                , {field: 'task_cycle', title: '周期(ms)', width: 100, align: 'center'}
+                , {field: 'group_name', title: '分组名称', minWidth: 100, align: 'center'}
+                , {field: 'name', title: '任务名称', width: 90, align: 'center'}
+                , {field: 'method_name', title: '任务方法', width: 120, align: 'center'}
+                , {field: 'cron_expression', title: 'corn表达式', width: 100, align: 'center'}
                 , {field: 'status', title: '状态', width: 100, align: 'center', templet: "<div>{{d.status == 0 ? '<div class=\"layui-bg-orange\">未启动</div>':'<div class=\"layui-bg-green\">运行中<div>'}}</div>"}
-                , {field: 'start_time', title: '最近启动时间', width: 160, align: 'center',templet: "<div>{{d.start_time == null ? '' : layui.util.toDateString(d.start_time, 'yyyy-MM-dd HH:mm')}}</div>"}
-                , {field: 'stop_time', title: '最近关闭时间', width: 160, align: 'center',templet: "<div>{{d.stop_time == null ? '' : layui.util.toDateString(d.stop_time, 'yyyy-MM-dd HH:mm')}}</div>"}
+                /*, {field: 'start_time', title: '最近启动时间', width: 160, align: 'center',templet: "<div>{{d.start_time == null ? '' : layui.util.toDateString(d.start_time, 'yyyy-MM-dd HH:mm')}}</div>"}
+                , {field: 'stop_time', title: '最近关闭时间', width: 160, align: 'center',templet: "<div>{{d.stop_time == null ? '' : layui.util.toDateString(d.stop_time, 'yyyy-MM-dd HH:mm')}}</div>"}*/
                 , {title: '操作', width: 210, align: 'center', toolbar: '#toolbar'}
             ]]
             , page: true
@@ -214,7 +209,7 @@
                     anim: 4,
                     title: '任务编辑',
                     area: ['700px', '500px'],
-                    content: '${pageContext.request.contextPath}/system/thread/edit?id=' + data.id,
+                    content: '${pageContext.request.contextPath}/system/quartz/edit?id=' + data.id,
                     end: function () {
                         //触发刷新当页表格，子页面不需要parent.location.reload();
                         $("button[lay-filter=searchSelf]").click();
@@ -226,7 +221,7 @@
                     anim: 4,
                     title: '任务编辑',
                     area: ['700px', '500px'],
-                    content: '${pageContext.request.contextPath}/system/thread/detail?id=' + data.id,
+                    content: '${pageContext.request.contextPath}/system/quartz/detail?id=' + data.id,
                     end: function () {
                         //触发刷新当页表格，子页面不需要parent.location.reload();
                         $("button[lay-filter=searchSelf]").click();
@@ -236,7 +231,7 @@
                 layer.confirm('确认启动此交易线程么', function (index) {
                     $.ajax({
                         type: 'POST',
-                        url: '${pageContext.request.contextPath}/system/thread/start',
+                        url: '${pageContext.request.contextPath}/system/quartz/start',
                         data: {
                             "id": data.id,
                             "tradeName": data.trade_name,

@@ -55,6 +55,8 @@ public class QuartzController extends BaseController {
     @RequestMapping("/add")
     public ModelAndView add(){
         ModelAndView mv = getView("/system/quartz/list");
+        List<QuartzGroup> quartzGroups = quartzGroupService.getAllQuartzGroup();
+        mv.addObject("quartzGroups", quartzGroups);
         return mv;
     }
 
