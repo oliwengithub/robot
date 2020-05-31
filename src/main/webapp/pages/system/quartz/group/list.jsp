@@ -103,10 +103,11 @@
             , cols: [[
                /* {type: 'checkbox'}*/
                  {field: 'id', title: 'ID', width: 60, align: 'center', type: 'numbers'}
-                , {field: 'symbol', title: '交易对名称', width: 180, align: 'center'}
-                , {field: 'sdkPriceUrl', title: '获取交易对价格接口URL', minWidth: 200, align: 'center'}
-                , {field: 'sdkToUsdtUrl', title: '获取交易对中商品转换USDT接口URL', minWidth: 200, align: 'center'}
-                , {field: 'createDate', title: '创建时间', width: 180, align: 'center',templet: "<div>{{layui.util.toDateString(d.createDate, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
+                , {field: 'groupName', title: '分组名称', width: 180, align: 'center'}
+                , {field: 'groupCode', title: '分组唯一code', minWidth: 200, align: 'center'}
+                , {field: 'description', title: '分组描述', minWidth: 200, align: 'center'}
+                , {field: 'status', title: '分组状态', minWidth: 200, align: 'center'}
+                , {field: 'creatTime', title: '创建时间', width: 180, align: 'center',templet: "<div>{{layui.util.toDateString(d.creatTime, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
                 , {title: '操作', width: 180, align: 'center', toolbar: '#toolbar'}
             ]]
             , page: true
@@ -121,7 +122,7 @@
                     anim: 4,
                     title: '配置编辑',
                     area: ['700px', '270px'],
-                    content: '${pageContext.request.contextPath}/system/thread/config/edit?id=' + data.id,
+                    content: '${pageContext.request.contextPath}/system/quartz/group/edit?id=' + data.id,
                     end: function () {
                         //触发刷新当页表格，子页面不需要parent.location.reload();
                         $("button[lay-filter=searchSelf]").click();
@@ -157,7 +158,7 @@
                 anim: 4,
                 title: '添加配置',
                 area: ['700px', '270px'],
-                content: '${pageContext.request.contextPath}/system/thread/config/add',
+                content: '${pageContext.request.contextPath}/system/quartz/group/add',
                 end: function () {
                     //触发刷新当页表格，子页面不需要parent.location.reload();
                     $("button[lay-filter=searchSelf]").click();

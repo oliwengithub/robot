@@ -4,13 +4,13 @@ import com.oliwen.base.BaseController;
 import com.oliwen.entity.Page;
 import com.oliwen.entity.PageData;
 import com.oliwen.entity.ResultBody;
+import com.oliwen.interceptor.OperationMapping;
+import com.oliwen.interceptor.SecurityAnnotation;
 import com.oliwen.pojo.Quartz;
 import com.oliwen.pojo.QuartzGroup;
 import com.oliwen.service.quartz.QuartzGroupService;
 import com.oliwen.service.quartz.QuartzService;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
+import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,17 +41,77 @@ public class QuartzOperateController extends BaseController {
     @Qualifier("Scheduler")
     private Scheduler scheduler;
 
-
     @RequestMapping("/start")
+    @SecurityAnnotation(login = false,auth = false)
     public ResultBody startThread(Integer quartzId) throws Exception {
         ResultBody body = new ResultBody();
 
+        //Quartz quartz = quartzService.getQuartzById(quartzId);
+        Quartz quartz = new Quartz();
+        quartz.setId(1);
+        quartz.setName("demo");
+        quartz.setDescription("1");
+        quartz.setCronExpression("0/2 * * * * ?");
+        quartz.setClassName("com.oliwen.quartz.QuartzDemo");
+        quartz.setMethodName("test");
 
+        this.bindingQuartz(quartz);
+
+        JobKey key = new JobKey(quartz.getName(), quartz.getDescription());
+        scheduler.resumeJob(key);
         //JobKey jobKey = new JobKey(quartz.getGroupId().toString(), quartz.getClassName());
 
         //清除
         // scheduler.deleteJob(jobKey);
         return body;
+    }
+
+    @RequestMapping("/stop")
+    public ResultBody stopThread(Integer quartzId) throws SchedulerException {
+        ResultBody body = new ResultBody();
+        Quartz quartz = quartzService.getQuartzById(quartzId);
+        JobKey key = new JobKey(quartz.getName(), quartz.getGroupId().toString());
+        scheduler.pauseJob(key);
+        return body;
+    }
+
+    private boolean bindingQuartz(Quartz quartz) {
+        JobKey key = new JobKey(quartz.getName(),quartz.getDescription());
+        try {
+            scheduler.deleteJob(key);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+        Class cls = null;
+        try {
+            cls = Class.forName(quartz.getClassName());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            cls.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        //构建job信息
+        JobDetail job = JobBuilder.newJob(cls).withIdentity(quartz.getName(),
+                quartz.getDescription())
+                .withDescription(quartz.getDescription()).build();
+        job.getJobDataMap().put("jobMethodName", quartz.getMethodName());
+        // 触发时间点
+        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(quartz.getCronExpression());
+        Trigger trigger = TriggerBuilder.newTrigger().withIdentity("trigger"+quartz.getName(), quartz.getDescription())
+                .startNow().withSchedule(cronScheduleBuilder).build();
+        //交由Scheduler安排触发
+        try {
+            scheduler.scheduleJob(job, trigger);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+        return true;
+
     }
 
     /*@RequestMapping("/start")

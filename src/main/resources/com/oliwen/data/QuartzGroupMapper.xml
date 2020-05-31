@@ -13,12 +13,12 @@
     </constructor>
   </resultMap>
 
-  <select id="queryQuartzGroupPageList" parameterType="page" resultType="pd">
+  <select id="queryQuartzGroupPageList" parameterType="page" resultMap="BaseResultMap">
     select * from quartz_group
   </select>
 
   <select id="getAllQuartzGroup" parameterType="page" resultMap="BaseResultMap">
-    select * from quartz_group
+    select * from quartz_group  order by id asc ;
   </select>
 
 </mapper>

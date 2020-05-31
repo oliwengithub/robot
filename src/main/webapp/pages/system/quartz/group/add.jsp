@@ -28,21 +28,28 @@
                 <div class="layui-card-body" pad15>
                     <form class="layui-form" action="">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">交易对</label>
+                            <label class="layui-form-label">分组名称</label>
                             <div class="layui-input-block">
-                                <input type="text" name="symbol" value="" autocomplete="off" placeholder="参数对应的交易对名称" class="layui-input">
+                                <input type="text" name="groupName" value="" autocomplete="off" placeholder="分组名称" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">价格URL</label>
+                            <label class="layui-form-label">分组描述</label>
                             <div class="layui-input-block">
-                                <input type="text" name="sdkPriceUrl" autocomplete="off" placeholder="获取交易对价格接口URL" class="layui-input" >
+                                <input type="text" name="description" autocomplete="off" placeholder="分组描述" class="layui-input" >
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">toUsdtURL</label>
+                            <label class="layui-form-label">自定义参数</label>
                             <div class="layui-input-block">
                                 <input type="text" name="sdkToUsdtUrl" autocomplete="off" placeholder="获取交易对中商品转换USDT接口URL" class="layui-input" >
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">是否启用</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="status" value="0" title="正常" checked>
+                                <input type="radio" name="status" value="1" title="禁用">
                             </div>
                         </div>
                         <div class="layui-form-item">

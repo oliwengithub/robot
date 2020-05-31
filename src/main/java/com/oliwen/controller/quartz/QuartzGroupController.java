@@ -40,7 +40,7 @@ public class QuartzGroupController extends BaseController {
         Page page = new Page(pageIndex, pageSize);
         page.setPd(this.getPageData());
         page.setCheckTotal(true);
-        List<PageData> queryQuartzList = quartzGroupService.queryQuartzGroupPageList(page);
+        List<QuartzGroup> queryQuartzList = quartzGroupService.queryQuartzGroupPageList(page);
         body.setData(queryQuartzList);
         body.setCount(page.getTotalResult());
         return body;
@@ -48,7 +48,7 @@ public class QuartzGroupController extends BaseController {
 
     @RequestMapping("/add")
     public ModelAndView add(){
-        ModelAndView mv = getView("/system/quartz/group/list");
+        ModelAndView mv = getView("/system/quartz/group/add");
         return mv;
     }
 
@@ -66,7 +66,7 @@ public class QuartzGroupController extends BaseController {
     public ModelAndView edit(Integer id) {
         ModelAndView mv = getView("/system/quartz/group/edit");
         QuartzGroup quartzGroup = quartzGroupService.getQuartzGroupById(id);
-        mv.addObject("quartzGroup", quartzGroup);
+        mv.addObject("group", quartzGroup);
         return mv;
     }
 

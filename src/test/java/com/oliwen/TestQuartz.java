@@ -45,7 +45,16 @@ public class TestQuartz {
     public void test_02(){
 
         Page page = new Page(1, 10);
-        List<PageData> pageData = quartzGroupService.queryQuartzGroupPageList(page);
+        List<QuartzGroup> pageData = quartzGroupService.queryQuartzGroupPageList(page);
+        System.out.println(pageData);
+
+    }
+
+    @Test
+    public void test_03(){
+
+        Page page = new Page(1, 10);
+        List<PageData> pageData = quartzService.queryQuartzPageList(page);
         System.out.println(pageData);
 
     }

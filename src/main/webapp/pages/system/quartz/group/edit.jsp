@@ -27,85 +27,32 @@
             <div class="layui-card">
                 <div class="layui-card-body" pad15>
                     <form class="layui-form" action="">
+                        <input type="hidden" value="${group.id}">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">交易对</label>
+                            <label class="layui-form-label">分组名称</label>
                             <div class="layui-input-block">
-                                <input type="text" name="symbol" value="${tradeConfig.symbol}" autocomplete="off" placeholder="参数对应的交易对名称" class="layui-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">价格URL</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="sdkPriceUrl" value="${tradeConfig.sdkPriceUrl}" autocomplete="off" placeholder="获取参数API接口url" class="layui-input" >
+                                <input type="text" name="groupName" value="${group.groupName}" autocomplete="off" placeholder="分组名称" class="layui-input">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">toUsdtURL</label>
+                            <label class="layui-form-label">分组描述</label>
                             <div class="layui-input-block">
-                                <input type="text" name="sdkToUsdtUrl" value="${tradeConfig.sdkToUsdtUrl}" autocomplete="off" placeholder="获取参数API接口url" class="layui-input" >
+                                <input type="text" name="description" value="${group.description}" autocomplete="off" placeholder="分组描述" class="layui-input" >
                             </div>
                         </div>
-                           <%-- <div class="layui-form-item">
-                                <label class="layui-form-label">交易用户ID</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="clientId" value="${tradeThread.clientId}" autocomplete="off" placeholder="交易用户ID" class="layui-input">
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">交易对名称</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="symbol" value="${tradeThread.symbol}" autocomplete="off" placeholder="交易对" class="layui-input" >
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">单价小数位</label>
-                                <div class="layui-input-block">
-                                    <input type="number" name="priceDigit" value="${tradeThread.priceDigit}" placeholder="单价小数位" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">数量小数位</label>
-                                <div class="layui-input-block">
-                                    <input type="number" name="numDigit" value="${tradeThread.numDigit}" maxlength="30" placeholder="数量小数位" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">调度周期</label>
-                                <div class="layui-input-block">
-                                    <input type="number" name="taskCycle" value="${tradeThread.taskCycle}" maxlength="30" placeholder="交易周期单位(ms)" autocomplete="off" class="layui-input">
-                                </div>
-                            </div>--%>
-                       <%-- <div class="layui-col-xs6">
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">状态</label>
-                                <div class="layui-input-block">
-                                    <input type="radio" name="status" value="0" title="正常" checked>
-                                    <input type="radio" name="status" value="1" title="禁用">
-                                </div>
-                            </div>
-                        </div>
-                         <div class="layui-col-xs6">
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">最后开始时间</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="start_date_time" maxlength="30" placeholder="请谨慎填写，添加成功后，发送账号信息到此邮箱" autocomplete="off" class="layui-input" lay-verify="email">
-                                </div>
-                            </div>
-                        </div>
-                         <div class="layui-col-xs6">
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">最后关闭时间</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="stop_data_time" maxlength="30" placeholder="请谨慎填写，添加成功后，发送账号信息到此邮箱" autocomplete="off" class="layui-input" lay-verify="email">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="layui-form-item layui-form-text">
-                            <label class="layui-form-label"></label>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">自定义参数</label>
                             <div class="layui-input-block">
-                                <textarea name="remark" placeholder="请用简单的话描述下此用户..." class="layui-textarea" maxlength="500"></textarea>
+                                <input type="text" name="params" autocomplete="off" ${group.params} placeholder="获取交易对中商品转换USDT接口URL" class="layui-input" >
                             </div>
-                        </div>--%>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">是否启用</label>
+                            <div class="layui-input-block">
+                                <input type="radio" name="status" value="0" title="正常" <c:if test="${group.params == 0}">checked</c:if> >
+                                <input type="radio" name="status" value="1" title="禁用"<c:if test="${group.params == 1}">checked</c:if> >
+                            </div>
+                        </div>
                         <div class="layui-form-item">
                             <div class="layui-input-block">
                                 <button class="layui-btn" lay-submit lay-filter="save">确认提交</button>
@@ -132,7 +79,7 @@
         form.on('submit(save)', function(obj){
             $.ajax({
                 type: 'POST',
-                url: '${pageContext.request.contextPath}/system/thread/config/update',
+                url: '${pageContext.request.contextPath}/system/quartz/group/update',
                 data: obj.field,
                 success: function (result) {
                     if(result.code === 1){

@@ -32,7 +32,7 @@ public class QuartzGroupService {
     private QuartzGroupMapper quartzGroupMapper;
 
 
-    public List<PageData> queryQuartzGroupPageList (Page page) {
+    public List<QuartzGroup> queryQuartzGroupPageList (Page page) {
         return sqlSessionTemplate.selectList("com.oliwen.data.QuartzGroupMapper.queryQuartzGroupPageList", page);
     }
 

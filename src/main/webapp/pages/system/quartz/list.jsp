@@ -193,8 +193,7 @@
                 , {field: 'method_name', title: '任务方法', width: 120, align: 'center'}
                 , {field: 'cron_expression', title: 'corn表达式', width: 100, align: 'center'}
                 , {field: 'status', title: '状态', width: 100, align: 'center', templet: "<div>{{d.status == 0 ? '<div class=\"layui-bg-orange\">未启动</div>':'<div class=\"layui-bg-green\">运行中<div>'}}</div>"}
-                /*, {field: 'start_time', title: '最近启动时间', width: 160, align: 'center',templet: "<div>{{d.start_time == null ? '' : layui.util.toDateString(d.start_time, 'yyyy-MM-dd HH:mm')}}</div>"}
-                , {field: 'stop_time', title: '最近关闭时间', width: 160, align: 'center',templet: "<div>{{d.stop_time == null ? '' : layui.util.toDateString(d.stop_time, 'yyyy-MM-dd HH:mm')}}</div>"}*/
+                , {field: 'create_time', title: '创建时间', width: 160, align: 'center',templet: "<div>{{d.create_time == null ? '' : layui.util.toDateString(d.create_time, 'yyyy-MM-dd HH:mm')}}</div>"}
                 , {title: '操作', width: 210, align: 'center', toolbar: '#toolbar'}
             ]]
             , page: true

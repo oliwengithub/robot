@@ -15,8 +15,9 @@
     </constructor>
   </resultMap>
 
-  <select id="queryQuartzPageList" parameterType="page" resultMap="BaseResultMap">
-    select * from quartz
+  <select id="queryQuartzPageList" parameterType="page" resultType="pd">
+    select q.id, q.name, q.group_id, q.class_name, q.cron_expression, q.method_name, q.status, q.create_time, qg.group_name from quartz q
+    left join quartz_group qg on q.group_id = qg.id
   </select>
 
 </mapper>
